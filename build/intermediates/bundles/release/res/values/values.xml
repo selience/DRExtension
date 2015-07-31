@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/D:/Projects/android-sdk-trunk/library/src/main/res/values/public.xml -->
+    <eat-comment/>
+    <item name="animator" type="anim"/>
+    <declare-styleable name="CircleImageView"><attr format="dimension" name="border_width"/><attr format="color" name="border_color"/></declare-styleable>
+    <!-- From: file:/D:/Projects/android-sdk-trunk/library/src/main/res/values/ids.xml -->
+    <eat-comment/>
+    <item name="listContainer" type="id"/>
+    <item name="progressContainer" type="id"/>
+    <!-- From: file:/D:/Projects/android-sdk-trunk/library/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="loading">Loading</string>
+    <!-- From: file:/D:/Projects/android-sdk-trunk/library/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="Animation.Activity" parent="android:Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
+    </style>
+    <style name="Dialog.ContentOverlay" parent="android:Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+</resources>
