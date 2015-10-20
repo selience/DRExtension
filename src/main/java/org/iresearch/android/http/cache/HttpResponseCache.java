@@ -7,8 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.iresearch.android.cache.AbstractCache;
-import org.iresearch.android.cache.CacheHelper;
+import me.darkeet.android.cache.AbstractCache;
+import me.darkeet.android.cache.CacheHelper;
 import org.iresearch.android.http.cache.CachedHttpResponse.ResponseData;
 
 
