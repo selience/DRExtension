@@ -14,9 +14,56 @@ import me.darkeet.android.log.DebugLog;
  * Desc: Fragment基类，增加对Fragment栈管理
  */
 public abstract class DRBaseStackFragment extends DRBaseFragment {
+    private static final String FRAGMENT_TITLE = "title";
+
+    private CharSequence mTitle;
 
     /**
-     * 装载Fragment到指定界面
+     * 设置界面标题
+     *
+     * @param resId 标题资源
+     */
+    public void setTitle(int resId) {
+        setTitle(getText(resId));
+    }
+
+    /**
+     * 设置Activity标题
+     *
+     * @param title 标题字符串
+     */
+    public void setTitle(CharSequence title) {
+        this.mTitle = title;
+        final Activity activity = getActivity();
+        if (activity != null) activity.setTitle(title);
+    }
+
+    /**
+     * 存储Fragment设置标题
+     *
+     * @param outState
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putCharSequence(FRAGMENT_TITLE, mTitle);
+    }
+
+    /**
+     * 恢复Fragment设置标题
+     *
+     * @param savedInstanceState
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            setTitle(savedInstanceState.getCharSequence(FRAGMENT_TITLE));
+        }
+    }
+
+    /**
+     * 装载Fragment到指定视图
      *
      * @param clazz Fragment描述类
      * @param tag   Fragment唯一标识，根据TAG可获取指定的Fragment
