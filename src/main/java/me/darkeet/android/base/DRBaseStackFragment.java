@@ -25,8 +25,8 @@ public abstract class DRBaseStackFragment extends DRBaseFragment {
     public void replace(Class<? extends DRBaseStackFragment> clazz, String tag, Bundle args) {
         final Activity activity = getActivity();
         if (activity == null) return;
-        if (activity instanceof DRBaseStackActivity) {
-            ((DRBaseStackActivity) activity).replace(clazz, tag, args);
+        if (activity instanceof DRBaseFragmentActivity) {
+            ((DRBaseFragmentActivity) activity).replace(clazz, tag, args);
         }
     }
 
@@ -36,8 +36,8 @@ public abstract class DRBaseStackFragment extends DRBaseFragment {
     public void popFragment() {
         final Activity activity = getActivity();
         if (activity == null) return;
-        if (activity instanceof DRBaseStackActivity) {
-            ((DRBaseStackActivity) activity).popFragment();
+        if (activity instanceof DRBaseFragmentActivity) {
+            ((DRBaseFragmentActivity) activity).popFragment();
         }
     }
 

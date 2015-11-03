@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import java.lang.Thread.UncaughtExceptionHandler;
-import me.darkeet.android.compat.EnvironmentAccessor;
+import me.darkeet.android.compat.EnvironmentCompat;
 import me.darkeet.android.utils.DeviceUtils;
 import me.darkeet.android.utils.FileUtils;
 import me.darkeet.android.utils.Utils;
@@ -109,8 +109,8 @@ public class AppException implements UncaughtExceptionHandler {
             String fileName = "crash-" + System.currentTimeMillis() + ".log";
             // 获取异常信息存储路径
             File rootFile = null;
-            if (EnvironmentAccessor.isExternalStorageAvailable()) {
-                rootFile = EnvironmentAccessor.getExternalFilesDir(mContext, null);
+            if (EnvironmentCompat.isExternalStorageAvailable()) {
+                rootFile = EnvironmentCompat.getExternalFilesDir(mContext, null);
                 FileUtils.createFile(rootFile);
             } else {
                 rootFile = mContext.getFilesDir();

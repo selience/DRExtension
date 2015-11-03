@@ -1,13 +1,10 @@
 
 package me.darkeet.android.base;
 
+import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import me.darkeet.android.log.DebugLog;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import me.darkeet.android.callbacks.ActivityLifecycleDispatcher;
 
@@ -93,18 +90,5 @@ public class DRBaseActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         DebugLog.d(TAG, "onBackPressed");
-    }
-
-
-    public void replaceFragment(int containerViewId, Class<? extends Fragment> clazz,
-                                String tag, Bundle args) {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentByTag(tag);
-        if (fragment == null) {
-            fragment = Fragment.instantiate(this, clazz.getName(), args);
-        }
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(containerViewId, fragment, tag);
-        transaction.commitAllowingStateLoss();
     }
 }

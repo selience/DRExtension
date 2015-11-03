@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -17,8 +18,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import me.darkeet.android.compat.ViewAccessor;
-import me.darkeet.android.compat.WebSettingsAccessor;
+import me.darkeet.android.compat.WebSettingsCompat;
 import me.darkeet.android.utils.ReflectionUtils;
 
 /**
@@ -56,8 +56,8 @@ public class DRWebViewFragment extends DRBaseStackFragment {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setJavaScriptEnabled(true);
         webSettings.setUserAgentString("android-native");
-        ViewAccessor.setLayerType(mWebView, View.LAYER_TYPE_SOFTWARE, null);
-        WebSettingsAccessor.setAllowUniversalAccessFromFileURLs(webSettings, true);
+        //ViewCompat.setLayerType(mWebView, View.LAYER_TYPE_SOFTWARE, null);
+        WebSettingsCompat.setAllowUniversalAccessFromFileURLs(webSettings, true);
 
         mZoomTimeout = ViewConfiguration.getZoomControlsTimeout();
         mWebView.setWebViewClient(new DefaultWebViewClient(mActivity));
