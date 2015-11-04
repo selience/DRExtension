@@ -1,20 +1,12 @@
 package me.darkeet.android.utils;
 
-import android.net.Uri;
-import java.net.Inet4Address;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.impl.client.DefaultHttpClient;
+import java.net.Inet4Address;
 
 /**
  * @className NetworkUtils
@@ -53,6 +45,7 @@ public final class NetworkUtils {
    
     /**
      * 获取当前设备IP地址
+	 * 需要加入权限<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
      */
     public static String ipToString(Context context) {
 		WifiManager wifiManager = (WifiManager) context
@@ -79,7 +72,7 @@ public final class NetworkUtils {
 	/**
 	 * 获取当前连接网络类型
 	 */
-	public NetworkType checkNetworkType(Context context) {
+	public static String checkNetworkType(Context context) {
 		ConnectivityManager connectivityManager=(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		if (networkInfo!=null && networkInfo.isConnected()) {
@@ -90,7 +83,7 @@ public final class NetworkUtils {
 		            case TelephonyManager.NETWORK_TYPE_CDMA:
 		            case TelephonyManager.NETWORK_TYPE_1xRTT:
 		            case TelephonyManager.NETWORK_TYPE_IDEN:
-		                return NetworkType.NETTYPE_MOBILE_2G; // 2G
+		                return "2G"; // 2G
 		            case TelephonyManager.NETWORK_TYPE_UMTS:
 		            case TelephonyManager.NETWORK_TYPE_EVDO_0:
 		            case TelephonyManager.NETWORK_TYPE_EVDO_A:
@@ -100,15 +93,15 @@ public final class NetworkUtils {
 		            case TelephonyManager.NETWORK_TYPE_EVDO_B:
 		            case TelephonyManager.NETWORK_TYPE_EHRPD:
 		            case TelephonyManager.NETWORK_TYPE_HSPAP:
-		                return NetworkType.NETTYPE_MOBILE_3G; // 3G
+		                return "3G"; // 3G
 		            case TelephonyManager.NETWORK_TYPE_LTE:
-		                return NetworkType.NETTYPE_MOBILE_4G; // 4G
+		                return "4G"; // 4G
 	            }
 		    } else if (networkInfo.getType()==ConnectivityManager.TYPE_WIFI) {
-		        return NetworkType.NETTYPE_WIFI;
+		        return "WiFi";
 		    }
 		}
-		return NetworkType.NETTYPE_UNKNOWN;
+		return "Known";
 	}
 	
     /**
@@ -132,49 +125,4 @@ public final class NetworkUtils {
 		}
 		return providersName;
 	}
-    
-    /** 设置网络代理APN  */
-    public static void setProxy(Context context, DefaultHttpClient httpClient) {
-		try {
-			// APN网络的API是隐藏的,获取手机的APN设置,需要通过ContentProvider来进行数据库查询
-			// 取得全部的APN列表：content://telephony/carriers；
-			// 取得当前设置的APN：content://telephony/carriers/preferapn；
-			// 取得current=1的APN：content://telephony/carriers/current；
-			ContentValues values = new ContentValues();
-			Cursor cursor = context.getContentResolver().query(
-					Uri.parse("content://telephony/carriers/preferapn"), null, null, null, null);
-			if (cursor != null && cursor.getCount() > 0) {
-				if (cursor.moveToFirst()) {
-					int colCount = cursor.getColumnCount();
-					for (int i = 0; i < colCount; i++) {
-						values.put(cursor.getColumnName(i), cursor.getString(i));
-					}
-				}
-				cursor.close();
-			}
-            // 中国移动WAP设置：  APN：CMWAP；代理：10.0.0.172；端口：80;   
-            // 中国联通WAP设置：  APN：UNIWAP；代理：10.0.0.172；端口：80;   
-            // 中国联通3GWAP设置  APN：3GWAP；代理：10.0.0.172；端口：80; 
-			// 中国电信WAP设置：  APN: CTWAP；代理：10.0.0.200；端口：80;
-			String proxyHost = (String) values.get("proxy");
-			if (proxyHost!=null && proxyHost.length()>0 && !isWiFiConnected(context)) {
-				int prot = Integer.parseInt(String.valueOf(values.get("port")));
-				httpClient.getCredentialsProvider().setCredentials(
-						new AuthScope(proxyHost, prot),
-						new UsernamePasswordCredentials((String) values.get("user"), (String) values.get("password")));
-				HttpHost proxy = new HttpHost(proxyHost, prot);
-				httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-    
-    public static enum NetworkType {
-        NETTYPE_WIFI,
-        NETTYPE_MOBILE_2G,
-        NETTYPE_MOBILE_3G, 
-        NETTYPE_MOBILE_4G, 
-        NETTYPE_UNKNOWN,
-    }
 }

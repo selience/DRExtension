@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
 import android.view.View;
 import java.net.URLEncoder;
 import android.view.Window;
@@ -18,12 +17,12 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.text.TextUtils;
 import android.view.WindowManager;
-import org.iresearch.android.BuildConfig;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import java.io.UnsupportedEncodingException;
 import android.media.MediaScannerConnection;
 import android.media.MediaScannerConnection.OnScanCompletedListener;
+import me.darkeet.android.BuildConfig;
 
 public final class Utils {
 
