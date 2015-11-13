@@ -1,7 +1,8 @@
 
 package me.darkeet.android.utils;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,11 +11,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresPermission;
 
 /**
- * @date 2014.06.16
- * @author kevin.lee
- * @TODO   https://github.com/iPaulPro/aFileChooser
+ * Name: ImagePickerFragment
+ * User: Lee (darkeet.me@gmail.com)
+ * Date: 2015/11/5 16:57
+ * Desc: 文件路径处理类  https://github.com/iPaulPro/aFileChooser
  */
 public class MediaUtils {
 
@@ -25,11 +28,15 @@ public class MediaUtils {
      * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
      * other file-based ContentProviders.
-     * 
+     *
      * @param context The context.
      * @param uri The Uri to query.
      */
-    @SuppressLint("NewApi")
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @RequiresPermission(anyOf = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE}
+    )
     public static String getPath(final Context context, final Uri uri) {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -92,13 +99,17 @@ public class MediaUtils {
     /**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
-     * 
+     *
      * @param context The context.
      * @param uri The Uri to query.
      * @param selection (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
+    @RequiresPermission(anyOf = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE}
+    )
     public static String getDataColumn(Context context, Uri uri, String selection,
             String[] selectionArgs) {
 

@@ -1,12 +1,16 @@
 
 package me.darkeet.android.base;
 
+import java.util.List;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.view.ActionMode;
 import me.darkeet.android.app.StackManager;
+import me.darkeet.android.log.DebugLog;
 
 /**
  * Name: DRBaseStackActivity
@@ -42,7 +46,20 @@ public class DRBaseFragmentActivity extends DRBaseActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments == null) return;
+        for (Fragment fragment : fragments) {
+            if (fragment == null) continue;
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onSupportActionModeStarted(ActionMode mode) {
+        super.onSupportActionModeStarted(mode);
+        DebugLog.d(TAG, "onSupportActionModeStarted");
         if (mStackManager != null) {
             DRBaseStackFragment f = mStackManager.peekFragment();
             if (f != null) f.onActionModeStarted(mode);
@@ -51,6 +68,8 @@ public class DRBaseFragmentActivity extends DRBaseActivity {
 
     @Override
     public void onSupportActionModeFinished(ActionMode mode) {
+        super.onSupportActionModeFinished(mode);
+        DebugLog.d(TAG, "onSupportActionModeFinished");
         if (mStackManager != null) {
             DRBaseStackFragment f = mStackManager.peekFragment();
             if (f != null) f.onActionModeFinished(mode);
@@ -58,7 +77,20 @@ public class DRBaseFragmentActivity extends DRBaseActivity {
     }
 
     @Override
+    public Intent getSupportParentActivityIntent() {
+        DebugLog.d(TAG, "getSupportParentActivityIntent");
+        return super.getSupportParentActivityIntent();
+    }
+
+    @Override
+    public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder builder) {
+        super.onCreateSupportNavigateUpTaskStack(builder);
+        DebugLog.d(TAG, "onCreateSupportNavigateUpTaskStack");
+    }
+
+    @Override
     public final boolean onSupportNavigateUp() {
+        DebugLog.d(TAG, "onSupportNavigateUp");
         if (mStackManager != null && mStackManager.stackSize() > 1) {
             if (mStackManager.peekFragment().onNavigateUp()) {
                 return true;
@@ -72,6 +104,7 @@ public class DRBaseFragmentActivity extends DRBaseActivity {
 
     @Override
     public void onBackPressed() {
+        DebugLog.d(TAG, "onBackPressed");
         if (mStackManager != null && mStackManager.stackSize() > 1) {
             if (mStackManager.peekFragment().onBackPressed()) {
                 return;

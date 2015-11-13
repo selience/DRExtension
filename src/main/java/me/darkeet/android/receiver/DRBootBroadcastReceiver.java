@@ -21,12 +21,16 @@ import android.content.BroadcastReceiver;
 public class DRBootBroadcastReceiver extends BroadcastReceiver {
 
 	public interface OnBootCompletedListener {
-		
+
 		void onStart(Intent intent);
     }
-	
+
 	private OnBootCompletedListener onBootCompletedListener;
-	
+
+	public void setOnBootCompletedListener(OnBootCompletedListener listener) {
+		this.onBootCompletedListener = listener;
+	}
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (onBootCompletedListener!=null) {

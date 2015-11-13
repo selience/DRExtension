@@ -1,7 +1,10 @@
 package me.darkeet.android.base;
 
+import java.util.List;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -125,6 +128,17 @@ public abstract class DRBaseStackFragment extends DRBaseFragment {
         DebugLog.d(TAG, "onActionModeFinished");
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments == null) return;
+        for (Fragment fragment : fragments) {
+            if (fragment == null) continue;
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
     /**
      * 是否为单例模式

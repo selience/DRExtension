@@ -1,5 +1,6 @@
 package me.darkeet.android.utils;
 
+import android.Manifest;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -7,6 +8,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import java.net.Inet4Address;
+import android.support.annotation.RequiresPermission;
 
 /**
  * @className NetworkUtils
@@ -45,8 +47,8 @@ public final class NetworkUtils {
    
     /**
      * 获取当前设备IP地址
-	 * 需要加入权限<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
      */
+	@RequiresPermission(Manifest.permission.ACCESS_WIFI_STATE)
     public static String ipToString(Context context) {
 		WifiManager wifiManager = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);

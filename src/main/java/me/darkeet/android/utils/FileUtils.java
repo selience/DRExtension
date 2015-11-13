@@ -64,7 +64,7 @@ public final class FileUtils {
      * @param newName
      * @return
      */
-    public static boolean reNamePath(String oldName, String newName) {
+    public static boolean renameFile(String oldName, String newName) {
         File f = new File(oldName);
         return f.renameTo(new File(newName));
     }
@@ -75,11 +75,11 @@ public final class FileUtils {
      * @param filePath
      * @return
      */
-    public static String getFileName(String filePath) {
+    public static String getFileNameWithExtension(String filePath) {
         if (Utils.isEmpty(filePath)) return "";
         return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
     }
-    
+
     /**
      * 根据文件的绝对路径获取文件名但不包含扩展名
      * 
@@ -103,11 +103,11 @@ public final class FileUtils {
         int point = fileName.lastIndexOf('.');
         return fileName.substring(point + 1);
     }
-    
+
     /**
      * 列出root目录下所有子目录
      * 
-     * @param path
+     * @param root
      * @return 绝对路径
      */
     public static List<String> listPath(String root) {
@@ -214,7 +214,7 @@ public final class FileUtils {
     /**
      * 获取文件夹或者文件大小，循环迭代
      * 
-     * @param String path 路径或者文件
+     * @param fileDir path 路径或者文件
      * @return String 文件的大小，以BKMG来计量
      */
 	private static long getFileFolderTotalSize(File fileDir) {

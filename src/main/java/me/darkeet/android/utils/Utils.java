@@ -29,21 +29,21 @@ public final class Utils {
     private Utils() {
         throw new AssertionError("You are trying to create an instance for this utility class!");
     }
-    
+
     public static boolean isDebugBuild() {
         return BuildConfig.DEBUG;
     }
-    
+
     /**
      * 检查字符串是否存在值
-     * 
+     *
      * @param str 待检验的字符串
      * @return 当 字符串不为 NULL或空字符， 就返回 true；否则false.
      */
     public static boolean isEmpty(String str) {
         return (str == null || str.length() == 0);
     }
-    
+
     /**
      * 初始化AsyncTask异步任务类
      */
@@ -55,32 +55,36 @@ public final class Utils {
         } catch (final ClassNotFoundException e) {
         }
     }
-    
+
+
     /**
-     * 获取应用的缓存目录
-     * 
+     * 设置应用的缓存目录
+     *
      * @param context
      * @param cacheDirName
      * @return
      */
-    public static File getBestCacheDir(final Context context, final String cacheDirName) {
-        if (context == null) throw new NullPointerException();
-        final File extCacheDir;
-        try {
-            extCacheDir = context.getExternalCacheDir();
-        } catch (final Exception e) {
-            return new File(context.getCacheDir(), cacheDirName);
+    public static File getAppCacheDir(Context context, String cacheDirName) {
+        if (context == null) throw new NullPointerException("context is not null");
+        File externalStorageDirectory = context.getExternalCacheDir();
+
+        File cacheDir;
+        if (externalStorageDirectory != null) {
+            cacheDir = new File(externalStorageDirectory, cacheDirName);
+        } else {
+            cacheDir = new File(context.getCacheDir(), cacheDirName);
         }
-        if (extCacheDir != null && extCacheDir.isDirectory()) {
-            final File cacheDir = new File(extCacheDir, cacheDirName);
-            if (cacheDir.isDirectory() || cacheDir.mkdirs()) return cacheDir;
+
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs();
         }
-        return new File(context.getCacheDir(), cacheDirName);
+
+        return cacheDir;
     }
-    
+
     /**
      * 获取设备当前电量状态
-     * 
+     *
      * @param context
      * @return
      */
@@ -95,10 +99,10 @@ public final class Utils {
         final float scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
         return plugged || level / scale > 0.15f;
     }
-    
+
     /**
      * 判断URL的有效性
-     * 
+     *
      * @param text
      * @return
      */
@@ -106,10 +110,10 @@ public final class Utils {
         if (TextUtils.isEmpty(text)) return false;
         return URLUtil.isValidUrl(text.toString());
     }
-    
+
     /**
      * 对参数进行UTF-8编码，并替换特殊字符
-     * 
+     *
      * @param decString 待编码的参数字符串
      * @return 完成编码转换的字符串
      */
@@ -121,10 +125,10 @@ public final class Utils {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-    
+
     /**
      * 将 %XX 换为原符号，并进行UTF-8反编码
-     * 
+     *
      * @param encString 待反编码的参数字符串
      * @return 未进行UTF-8编码和字符替换的字符串
      */
@@ -158,9 +162,10 @@ public final class Utils {
         }
         return decode;
     }
-    
+
     /**
      * 设置全屏模式
+     *
      * @param activity
      * @param isFullScreen true 设置全拼; false 退出全屏；
      */
@@ -177,7 +182,7 @@ public final class Utils {
             window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
     }
-    
+
     /**
      * Returns the location of the view on the screen. The screen includes the
      * 'notification area' (aka 'status bar').
@@ -208,19 +213,19 @@ public final class Utils {
         res.offset(0, -statusBarHeight);
         return res;
     }
-    
+
     /**
      * 强制隐藏输入法窗口
      */
     public static void hideSoftInputFromWindow(View view) {
         // 实例化输入法控制对象，通过hideSoftInputFromWindow来控制
-        final Context context=view.getContext();
+        final Context context = view.getContext();
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm.isActive()) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-    
+
     /**
      * 平移动画处理
      */
@@ -230,10 +235,10 @@ public final class Utils {
         anim.setFillAfter(true);
         v.startAnimation(anim);
     }
-    
+
     /**
      * 扫描指定文件到媒体库
-     * 
+     *
      * @param context
      * @param paths
      * @param scanListener
@@ -241,10 +246,10 @@ public final class Utils {
     public static void scanFile(Context context, String[] paths, OnScanCompletedListener scanListener) {
         MediaScannerConnection.scanFile(context, paths, null, scanListener);
     }
-    
+
     /**
      * 获取方法调用状态信息
-     * 
+     *
      * @param e
      * @return
      */
@@ -264,13 +269,13 @@ public final class Utils {
 
     /**
      * 获取程序异常日志信息，也可调用Log.getStackTraceString()方法；
-     * 
+     *
      * @param tr
      * @return
      */
     public static String getStackTraceString(Throwable tr) {
         if (tr == null) return "";
-        
+
         try {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
