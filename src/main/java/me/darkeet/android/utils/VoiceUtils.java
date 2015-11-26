@@ -6,7 +6,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 
-public abstract class VoiceUtils {
+public class VoiceUtils {
+
+    private VoiceUtils() {
+    }
 
     /**
      * Start google activity of speechRecognition (needed on

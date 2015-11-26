@@ -28,7 +28,7 @@ import java.util.zip.ZipFile;
 
 /**
  * @author Jacky.Lee
- * @file ManifestSupport.java
+ * @file ManifestUtils.java
  * @create 2013-4-10 上午10:23:44
  * @description TODO
  */

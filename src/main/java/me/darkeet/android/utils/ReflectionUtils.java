@@ -9,7 +9,7 @@ import android.util.Log;
 /**
  * @className ReflectionUtils
  * @create 2014年4月16日 上午11:42:45
- * @author lilong (dreamxsky@gmail.com)
+ * @author lilong (darkeet.me@gmail.com)
  * @description A set of helper methods for best-effort method calls via reflection.
  */
 public class ReflectionUtils {

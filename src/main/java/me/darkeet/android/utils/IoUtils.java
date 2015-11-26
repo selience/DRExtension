@@ -8,63 +8,59 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 
+/**
+ * 提供IO流相关操作
+ */
 public class IoUtils {
     private static final int BUFFER_SIZE = 8192;
 
-    
-    public static byte[] readAllBytes(InputStream in) throws IOException {
-    	try {
-	        ByteArrayOutputStream out = new ByteArrayOutputStream();
-	        copy(in, out);
-	        return out.toByteArray();
-    	} finally {
-    		closeSilently(in);
-    	}
-    }
 
-    public static String readAllChars(Reader reader) throws IOException {
-    	try {
-	        char[] buffer = new char[BUFFER_SIZE];
-	        int read;
-	        StringBuilder builder = new StringBuilder();
-	        while ((read = reader.read(buffer)) != -1) {
-	        	builder.append(buffer, 0, read);
-	        }
-	        return builder.toString();
-    	} finally {
-    		closeSilently(reader);
-    	}
-    }
-    
     /**
-     * Silently close the given {@link Closeable}s, ignoring any
-     * {@link IOException}.<br/>
-     * {@code null} objects are ignored.
-     * 
-     * @param toClose The {@link Closeable}s to close.
+     * 读取所有的输入流{@link InputStream}到字节数组
+     *
+     * @param in 读取的输入流{@link InputStream}
+     * @return 返回读取的字节数组
+     * @throws IOException 读取过程发生异常抛出
      */
-    public static void closeSilently(Closeable... toClose) {
-        for (Closeable closeable : toClose) {
-            if (closeable != null) {
-                try {
-                    closeable.close();
-                } catch (IOException e) {
-                    // Ignored
-                }
-            }
+    public static byte[] readAllBytes(InputStream in) throws IOException {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            copy(in, out);
+            return out.toByteArray();
+        } finally {
+            closeSilently(in);
         }
     }
 
     /**
-     * Copy the contents of the given {@link InputStream} into the given
-     * {@link OutputStream}.<br/>
-     * Note: the given {@link InputStream} and {@link OutputStream} won't be
-     * closed.
-     * 
-     * @param in The {@link InputStream} to read.
-     * @param out The {@link OutputStream} to write to.
-     * @return the actual number of bytes that were read.
-     * @throws IOException If a error occurs while reading or writing.
+     * 从读取器{@link Reader}读取内容到字符串{@link String}
+     *
+     * @param reader 需要读取内容的读取器对象{@link Reader}
+     * @return 返回读取的内容
+     * @throws IOException 读取过程发生异常抛出
+     */
+    public static String readAllChars(Reader reader) throws IOException {
+        try {
+            char[] buffer = new char[BUFFER_SIZE];
+            int read;
+            StringBuilder builder = new StringBuilder();
+            while ((read = reader.read(buffer)) != -1) {
+                builder.append(buffer, 0, read);
+            }
+            return builder.toString();
+        } finally {
+            closeSilently(reader);
+        }
+    }
+
+
+    /**
+     * 拷贝输入流{@link InputStream}内容到输出流{@link OutputStream}，注意：输入流和输出流不能关闭；
+     *
+     * @param in  读取的输入流{@link InputStream}
+     * @param out 写入的输出流{@link OutputStream}
+     * @return 返回读取的字节大小
+     * @throws IOException 读取或写入过程发生异常抛出
      */
     public static long copy(InputStream in, OutputStream out) throws IOException {
         long res = 0;
@@ -79,24 +75,38 @@ public class IoUtils {
     }
 
     /**
-     * Fully reads the given {@link InputStream} into a {@link String}.<br/>
-     * The encoding inside the {@link InputStream} is assumed to be
-     * {@code UTF-8}.<br/>
-     * Note: the given {@link InputStream} won't be closed.
-     * 
-     * @param in The {@link InputStream} to read.
-     * @return a String containing the contents of the given {@link InputStream}
-     *         .
-     * @throws IOException If a error occurs while reading.
+     * 读取输入流{@link InputStream}内容到字符串{@link String}，编码默认UTF-8；
+     * 注意：读取过程中输入流{@link InputStream}不能关闭；
+     *
+     * @param in 读取的输入流{@link InputStream}
+     * @return 返回输入流的内容
+     * @throws IOException 读取过程中发生异常抛出
      */
     public static String readFully(InputStream in) throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
-        byte[] buffer = new byte[BUFFER_SIZE];
-        int read;
-        while ((read = in.read(buffer)) != -1) {
-            stringBuilder.append(new String(buffer, 0, read, "utf-8"));
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                stringBuilder.append(new String(buffer, 0, read, "UTF-8"));
+            }
+            return stringBuilder.toString();
+        } finally {
+            closeSilently(in);
         }
-        return stringBuilder.toString();
     }
 
+    /**
+     * 关闭所有输入流{@link InputStream}或输出流{@link OutputStream}对象
+     */
+    public static void closeSilently(Closeable... toClose) {
+        for (Closeable closeable : toClose) {
+            if (closeable != null) {
+                try {
+                    closeable.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
 }

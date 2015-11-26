@@ -2,24 +2,20 @@ package me.darkeet.android.base;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import me.darkeet.android.compat.WebSettingsCompat;
 import me.darkeet.android.utils.ReflectionUtils;
+import me.darkeet.android.webkit.DefaultWebViewClient;
 
 /**
  * Name: DRWebViewFragment
@@ -56,12 +52,11 @@ public class DRWebViewFragment extends DRBaseStackFragment {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setJavaScriptEnabled(true);
         webSettings.setUserAgentString("android-native");
-        //ViewCompat.setLayerType(mWebView, View.LAYER_TYPE_SOFTWARE, null);
+        setLayerType(mWebView, View.LAYER_TYPE_SOFTWARE, null);
         WebSettingsCompat.setAllowUniversalAccessFromFileURLs(webSettings, true);
 
         mZoomTimeout = ViewConfiguration.getZoomControlsTimeout();
         mWebView.setWebViewClient(new DefaultWebViewClient(mActivity));
-        mWebView.setWebChromeClient(new DefaultWebChromeClient(mActivity));
 
         final Bundle bundle = getArguments();
         if (bundle != null) {
@@ -126,11 +121,11 @@ public class DRWebViewFragment extends DRBaseStackFragment {
         return mIsWebViewAvailable ? mWebView : null;
     }
 
-    public final void setWebViewClient(final WebViewClient client) {
+    public void setWebViewClient(WebViewClient client) {
         mWebView.setWebViewClient(client);
     }
 
-    public final void setWebChromeClient(final WebChromeClient client) {
+    public void setWebChromeClient(WebChromeClient client) {
         mWebView.setWebChromeClient(client);
     }
 
@@ -138,61 +133,5 @@ public class DRWebViewFragment extends DRBaseStackFragment {
     private void setLayerType(final View view, final int layerType, final Paint paint) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) return;
         view.setLayerType(layerType, paint);
-    }
-
-    protected class DefaultWebViewClient extends WebViewClient {
-
-        private final Activity mActivity;
-
-        public DefaultWebViewClient(final Activity activity) {
-            mActivity = activity;
-        }
-
-        @Override
-        public void onPageStarted(final WebView view, final String url, final Bitmap favicon) {
-            super.onPageStarted(view, url, favicon);
-            mActivity.setProgressBarIndeterminateVisibility(true);
-        }
-
-        @Override
-        public void onPageFinished(final WebView view, final String url) {
-            super.onPageFinished(view, url);
-            mActivity.setTitle(view.getTitle());
-            mActivity.setProgressBarIndeterminateVisibility(false);
-        }
-
-        @Override
-        @TargetApi(Build.VERSION_CODES.FROYO)
-        public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
-            handler.proceed();
-        }
-
-        @Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            view.stopLoading();
-        }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-            view.loadUrl(url);
-            return true;
-        }
-    }
-
-    protected class DefaultWebChromeClient extends WebChromeClient {
-
-        private final Activity mActivity;
-
-        public DefaultWebChromeClient(final Activity activity) {
-            mActivity = activity;
-        }
-
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            mActivity.setTitle(newProgress + "%");
-            if (newProgress == 100) {
-                mActivity.setTitle(view.getTitle());
-            }
-        }
     }
 }

@@ -152,7 +152,7 @@ public class AppException implements UncaughtExceptionHandler {
         StringBuilder sb = new StringBuilder();
         sb.append("App version: " + versionName + "(v" + versionCode + ")\n");
         sb.append("Device locale: " + Locale.getDefault().toString() + "\n\n");
-        sb.append("Android ID: " + DeviceUtils.generateDeviceId(mContext));
+        sb.append("Android ID: " + DeviceUtils.getAndroidId(mContext));
 
         // phone information
         sb.append("PHONE SPECS\n");

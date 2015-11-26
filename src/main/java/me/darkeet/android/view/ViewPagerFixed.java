@@ -12,13 +12,13 @@ import android.view.View;
  * Date: 2015/10/15 18:10
  * Desc: ViewPager扩展类，增加设置是否滚动，自动适应子视图高度；
  */
-public class ExtendedViewPager extends ViewPager {
+public class ViewPagerFixed extends ViewPager {
 
-    public ExtendedViewPager(final Context context) {
+    public ViewPagerFixed(final Context context) {
         this(context, null);
     }
 
-    public ExtendedViewPager(final Context context, final AttributeSet attrs) {
+    public ViewPagerFixed(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 

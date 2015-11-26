@@ -18,12 +18,12 @@ import java.io.InputStreamReader;
 import android.os.storage.StorageManager;
 
 /**
- * @file StorageOptions.java
+ * @file StorageUtils.java
  * @create 2014年7月9日 下午1:37:02
  * @author Jacky.Lee
  * @description TODO
  */
-public class StorageOptions {
+public class StorageUtils {
     private static final String TMPFS = "tmpfs";
 
     // 存储卡当前的扫描状态
@@ -35,14 +35,14 @@ public class StorageOptions {
     private List<String> mRoots;
     
     private static class SingletonHolder {
-        final static StorageOptions INSTANCE = new StorageOptions();
+        final static StorageUtils INSTANCE = new StorageUtils();
     }
     
-    public static StorageOptions getInstance() {
+    public static StorageUtils getInstance() {
         return SingletonHolder.INSTANCE;
     }
     
-    private StorageOptions() {
+    private StorageUtils() {
         mStatus=MOUNTED_DEFAULT;
         mRoots=new ArrayList<String>();
     }
