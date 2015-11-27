@@ -3,7 +3,6 @@ package me.darkeet.android.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Point;
 import android.os.Build;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
@@ -60,92 +59,33 @@ public final class DeviceUtils {
     }
 
     /**
-     * 获取dimen值，如果是dp或sp，则乘以density，px不乘；功能与getDimensionPixelOffset类似；
-     *
-     * @param context
-     * @param resId
-     * @return
+     * dp转换px
      */
-    public static float getDimension(Context context, int resId) {
-        return context.getResources().getDimension(resId);
+    public static float dp2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getMetrics(context));
     }
 
     /**
-     * 获取dimen值，如果是dp或sp，则乘以density，px不乘；功能与getDimension类似；
-     *
-     * @param context
-     * @param resId
-     * @return
+     * px转换dp
      */
-    public static int getDimensionPixelOffset(Context context, int resId) {
-        return context.getResources().getDimensionPixelOffset(resId);
+    public static float px2dp(Context context, float pxValue) {
+        final float scale = getMetrics(context).density;
+        return (pxValue / scale + 0.5f);
     }
 
     /**
-     * 获取dimen值，所有的值都会乘以density；
-     *
-     * @param context
-     * @param resId
-     * @return
+     * sp转换px
      */
-    public static int getDimensionPixelSize(Context context, int resId) {
-        return context.getResources().getDimensionPixelSize(resId);
+    public static float sp2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, getMetrics(context));
     }
 
     /**
-     * px单位转换dp单位
+     * px转换dp
      */
-    public static float px2dp(Context context, float px) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, px, getMetrics(context));
-    }
-
-    /**
-     * dp单位转换px单位
-     *
-     * @param context
-     * @param dp
-     * @return
-     */
-    public static float dp2Px(Context context, float dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getMetrics(context));
-    }
-
-    /**
-     * px单位转换sp单位
-     *
-     * @param context
-     * @param px
-     * @return
-     */
-    public static float px2sp(Context context, float px) {
+    public static float px2sp(Context context, float value) {
         float scaledDensity = getMetrics(context).scaledDensity;
-        return (px / scaledDensity);
-    }
-
-    /**
-     * sp单位转换px单位
-     *
-     * @param context
-     * @param sp
-     * @return
-     */
-    public static float sp2px(Context context, float sp) {
-        float scaledDensity = getMetrics(context).scaledDensity;
-        return sp * scaledDensity;
-    }
-
-    /**
-     * 获取设备的密度大小
-     */
-    public static float getDensity(Context context) {
-        return getMetrics(context).density;
-    }
-
-    /**
-     * 获取设备的密度因子
-     */
-    public static int getDensitydpi(Context context) {
-        return getMetrics(context).densityDpi;
+        return (value / scaledDensity + 0.5f);
     }
 
     /**
@@ -156,14 +96,6 @@ public final class DeviceUtils {
      */
     public static DisplayMetrics getMetrics(Context context) {
         return context.getResources().getDisplayMetrics();
-    }
-
-    /**
-     * 获取屏幕的宽高
-     */
-    public static Point display(Context context) {
-        DisplayMetrics dm = getMetrics(context);
-        return new Point(dm.widthPixels, dm.heightPixels);
     }
 
     /**
