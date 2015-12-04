@@ -1,18 +1,17 @@
 package me.darkeet.android.utils;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.net.Uri;
 
 /**
  * Name: DebugModeUtils
@@ -25,25 +24,73 @@ public class BitmapUtils {
     private BitmapUtils() {
     }
 
-    public static void recycleBitmap(Bitmap bitmap) {
-        if (bitmap != null && !bitmap.isRecycled()) {
-            bitmap.recycle();
-            bitmap = null;
+    /**
+     * Bitmap转换drawable
+     *
+     * @param bitmap
+     * @return
+     */
+    public static Drawable bitmToDrawable(Bitmap bitmap) {
+        return new BitmapDrawable(bitmap);
+    }
+
+    /**
+     * Drawable转换Bitmap
+     *
+     * @param drawable
+     * @return
+     */
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    /**
+     * Bitmap转换字节数组
+     *
+     * @param bitmap
+     * @return
+     */
+    public static byte[] bitmapToByteArray(Bitmap bitmap,
+                                           CompressFormat format) {
+        ByteArrayOutputStream bos = null;
+        try {
+            bos = new ByteArrayOutputStream();
+            bitmap.compress(format, 100, bos);
+            return bos.toByteArray();
+        } finally {
+            IoUtils.closeSilently(bos);
         }
     }
 
-
-    public static Bitmap getBitmapForAssest(Context context, String filePath) {
-        AssetManager assetManager = context.getAssets();
-        InputStream ips = null;
-        Bitmap bitmap = null;
-        try {
-            ips = assetManager.open(filePath);
-            bitmap = BitmapFactory.decodeStream(ips);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void saveBitmapToDisk(Bitmap bitmap, File filePath) {
+        if (filePath == null || bitmap == null) {
+            return;
         }
-        return bitmap;
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(filePath);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeStream(out);
+        }
     }
 
 
@@ -130,23 +177,6 @@ public class BitmapUtils {
     }
 
 
-    public static void saveBitmapToDisk(Bitmap bitmap, File filePath) {
-        if (filePath == null || bitmap == null) {
-            return;
-        }
-
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(filePath);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            closeStream(out);
-        }
-    }
-
     private static void closeStream(Closeable is) {
         if (is != null) {
             try {
@@ -157,4 +187,14 @@ public class BitmapUtils {
         }
     }
 
+
+    /**
+     * 回收Bitmap
+     */
+    public static void recycleBitmap(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+            bitmap = null;
+        }
+    }
 }
