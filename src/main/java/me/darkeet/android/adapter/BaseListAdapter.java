@@ -15,29 +15,73 @@ import java.util.List;
  * Desc: 封装常用adpater操作
  */
 public abstract class BaseListAdapter<Model, T> extends BaseAdapter {
-
-    private List<Model> dataList;
-    private LayoutInflater inflater;
+    private List<Model> mDatList;
+    private LayoutInflater mInflater;
 
     public BaseListAdapter(Context context) {
-        dataList = new ArrayList<Model>();
-        inflater = LayoutInflater.from(context);
+        mDatList = new ArrayList<Model>();
+        mInflater = LayoutInflater.from(context);
+    }
+
+    public void addDataList(Model item) {
+        if (item != null) {
+            mDatList.add(item);
+        }
+    }
+
+    public void addDataList(int location, Model item) {
+        if (item != null) {
+            mDatList.add(location, item);
+        }
+    }
+
+    public void addDataList(List<Model> items) {
+        if (items != null) {
+            mDatList.addAll(items);
+        }
+    }
+
+    public void setDataList(List<Model> items) {
+        if (items != null) {
+            mDatList.clear();
+            mDatList.addAll(items);
+        }
+    }
+
+    public void removeItem(Model item) {
+        if (item != null) {
+            mDatList.remove(item);
+        }
+    }
+
+    public void removeItem(int location) {
+        if (location >= 0 && location < mDatList.size()) {
+            mDatList.remove(location);
+        }
+    }
+
+    public void clearAll() {
+        mDatList.clear();
+    }
+
+    public List<Model> getDataList() {
+        return mDatList;
     }
 
     @Override
     public int getCount() {
-        return dataList.size();
+        return mDatList.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return dataList.isEmpty();
+        return mDatList.isEmpty();
     }
 
     @Override
     public Model getItem(int position) {
-        if (dataList.size() > position) {
-            return dataList.get(position);
+        if (mDatList.size() > position) {
+            return mDatList.get(position);
         }
         return null;
     }
@@ -47,38 +91,13 @@ public abstract class BaseListAdapter<Model, T> extends BaseAdapter {
         return position;
     }
 
-    public final void clearAll() {
-        dataList.clear();
-    }
-
-    public final int getListSize() {
-        return dataList.size();
-    }
-
-    public final List<Model> getItems() {
-        return dataList;
-    }
-
-    public final void addItems(List<Model> items) {
-        if (items!=null) {
-            dataList.addAll(items);
-        }
-    }
-
-    public final void setItems(List<Model> items) {
-        if (items!=null) {
-            dataList.clear();
-            dataList.addAll(items);
-        }
-    }
-
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
         T viewHolder = null;
         int itemType = getItemViewType(position);
 
         if (convertView == null) {
-            convertView = newView(inflater, parent, itemType);
+            convertView = newView(mInflater, parent, itemType);
             viewHolder = onCreateViewHolder(convertView, itemType);
             convertView.setTag(viewHolder);
         } else {
