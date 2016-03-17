@@ -22,23 +22,26 @@ android {
 }
 
 dependencies {
-    //compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:support-annotations:23.0.1'
+    // json
     apt 'com.bluelinelabs:logansquare-compiler:1.1.0'
     compile 'com.bluelinelabs:logansquare:1.1.0'
     compile 'com.alibaba:fastjson:1.2.4'
     compile 'com.google.code.gson:gson:2.3.1'
-    // okhttp
-    compile 'com.squareup.okio:okio:1.5.0'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
     // stetho
     compile 'com.facebook.stetho:stetho:1.2.0'
     compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
     compile 'com.facebook.stetho:stetho-urlconnection:1.1.0'
+    // retrofit
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
 }
 
 apt {
