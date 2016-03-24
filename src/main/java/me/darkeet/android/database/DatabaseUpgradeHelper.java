@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import me.darkeet.android.utils.ArrayUtils;
+import me.darkeet.android.util.ArrayUtils;
 
 import android.database.Cursor;
 import android.content.ContentValues;

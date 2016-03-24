@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 
 /**
  * Name: ExtendedViewPager
@@ -42,18 +41,5 @@ public class ViewPagerFixed extends ViewPager {
             ex.printStackTrace();
         }
         return false;
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int heightSize = 0;
-        for (int i = 0; i < getChildCount(); i++) {
-            View childView = getChildAt(i);
-            childView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-            int childHeight = childView.getMeasuredHeight();
-            // 取值最大高度
-            heightSize = Math.max(heightSize, childHeight);
-        }
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.EXACTLY));
     }
 }

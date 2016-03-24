@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import me.darkeet.android.utils.IoUtils;
+import me.darkeet.android.util.IoUtils;
 
 /**
  * Name: JSONFileIO

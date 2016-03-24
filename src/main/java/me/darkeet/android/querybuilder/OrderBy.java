@@ -27,7 +27,7 @@
 
 package me.darkeet.android.querybuilder;
 
-import me.darkeet.android.utils.ArrayUtils;
+import me.darkeet.android.util.ArrayUtils;
 
 public class OrderBy implements SQLLang {
 

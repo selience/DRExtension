@@ -173,7 +173,7 @@ public abstract class AbstractCache<KeyT, ValT> implements Map<KeyT, ValT> {
     }
 
     private void setRootDir(String rootDir) {
-        this.diskCacheDirectory = rootDir + "/cachefu/" + name.replaceAll("\\s", "");
+        this.diskCacheDirectory = rootDir + "/" + name.replaceAll("\\s", "");
     }
 
     /**
@@ -212,7 +212,7 @@ public abstract class AbstractCache<KeyT, ValT> implements Map<KeyT, ValT> {
      * Only meaningful if disk caching is enabled. See {@link #enableDiskCache}. Persists a value to
      * the disk cache.
      * 
-     * @param ostream
+     * @param file
      *            the file output stream (buffered).
      * @param value
      *            the cache value to persist

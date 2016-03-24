@@ -16,9 +16,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import me.darkeet.android.compat.EnvironmentCompat;
-import me.darkeet.android.utils.DeviceUtils;
-import me.darkeet.android.utils.FileUtils;
-import me.darkeet.android.utils.Utils;
+import me.darkeet.android.util.DeviceUtils;
+import me.darkeet.android.util.FileUtils;
+import me.darkeet.android.util.Utils;
 import android.provider.Settings.SettingNotFoundException;
 
 /**

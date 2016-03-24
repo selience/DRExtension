@@ -1,13 +1,12 @@
 package me.darkeet.android.cache;
 
+import android.os.Parcel;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import android.os.Parcel;
 
 /**
  * Allows caching Model objects using the features provided by {@link AbstractCache}. The key into
@@ -22,23 +21,10 @@ public class ModelCache extends AbstractCache<String, CachedModel> {
     /**
      * Creates an {@link AbstractCache} with params provided and name 'ModelCache'.
      * 
-     * @see com.github.droidfu.cachefu.AbstractCache#AbstractCache(java.lang.String, int, long, int)
+     * @see AbstractCache#AbstractCache(java.lang.String, int, long, int)
      */
     public ModelCache(int initialCapacity, long expirationInMinutes, int maxConcurrentThreads) {
         super("ModelCache", initialCapacity, expirationInMinutes, maxConcurrentThreads);
-    }
-
-    // Counter for all saves to cache. Used to determine if newer object in cache
-    private long transactionCount = Long.MIN_VALUE + 1;
-
-    /**
-     * @see com.github.droidfu.cachefu.AbstractCache#put(java.lang.Object, java.lang.Object)
-     */
-    @Override
-    public synchronized CachedModel put(String key, CachedModel value) {
-        // Set transaction id for checking validity against other values with same key
-        value.setTransactionId(transactionCount++);
-        return super.put(key, value);
     }
 
     /**
@@ -52,7 +38,7 @@ public class ModelCache extends AbstractCache<String, CachedModel> {
     }
 
     /**
-     * @see com.github.droidfu.cachefu.AbstractCache#getFileNameForKey(java.lang.Object)
+     * @see AbstractCache#getFileNameForKey(java.lang.Object)
      */
     @Override
     public String getFileNameForKey(String url) {
@@ -60,7 +46,7 @@ public class ModelCache extends AbstractCache<String, CachedModel> {
     }
 
     /**
-     * @see com.github.droidfu.cachefu.AbstractCache#readValueFromDisk(java.io.File)
+     * @see AbstractCache#readValueFromDisk(java.io.File)
      */
     @Override
     protected CachedModel readValueFromDisk(File file) throws IOException {
@@ -93,8 +79,7 @@ public class ModelCache extends AbstractCache<String, CachedModel> {
     }
 
     /**
-     * @see com.github.droidfu.cachefu.AbstractCache#writeValueToDisk(java.io.File,
-     *      java.lang.Object)
+     * @see AbstractCache#writeValueToDisk(java.io.File, java.lang.Object)
      */
     @Override
     protected void writeValueToDisk(File file, CachedModel data) throws IOException {

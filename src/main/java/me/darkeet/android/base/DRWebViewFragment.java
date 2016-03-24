@@ -14,7 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import me.darkeet.android.compat.WebSettingsCompat;
-import me.darkeet.android.utils.ReflectionUtils;
+import me.darkeet.android.util.ReflectionUtils;
 import me.darkeet.android.webkit.DefaultWebViewClient;
 
 /**
