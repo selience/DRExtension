@@ -1,6 +1,7 @@
 package me.darkeet.android.cache;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,8 @@ import java.util.List;
  * method, creating a copy of the list in its current state.
  *
  * @param <CO> Type of cached models to be stored in list
- * @author michaelengland
  */
-public class CachedList<CO extends CachedModel> extends CachedModel {
+public class CachedList<CO extends Parcelable> implements Parcelable {
 
     /**
      * List of objects.
@@ -28,16 +28,16 @@ public class CachedList<CO extends CachedModel> extends CachedModel {
     /**
      * Class type of object list
      */
-    private Class<? extends CachedModel> clazz;
+    private Class<? extends Parcelable> clazz;
 
-   /**
+    /**
      * Constructor setting variables from parcel. Same as using a blank constructor and calling
      * readFromParcel.
      *
      * @param source Parcel to be read from.
      */
-   protected CachedList(Parcel source) {
-        super(source);
+    public CachedList(Parcel source) {
+        readFromParcel(source);
     }
 
     /**
@@ -45,7 +45,7 @@ public class CachedList<CO extends CachedModel> extends CachedModel {
      *
      * @param clazz Required for parcelling and unparcelling of list
      */
-    public CachedList(Class<? extends CachedModel> clazz) {
+    public CachedList(Class<? extends Parcelable> clazz) {
         this.clazz = clazz;
         list = new ArrayList<CO>();
     }
@@ -56,7 +56,7 @@ public class CachedList<CO extends CachedModel> extends CachedModel {
      * @param clazz         Required for parcelling and unparcelling of list
      * @param initialLength Initial length of list
      */
-    public CachedList(Class<? extends CachedModel> clazz, int initialLength) {
+    public CachedList(Class<? extends Parcelable> clazz, int initialLength) {
         this.clazz = clazz;
         list = new ArrayList<CO>(initialLength);
     }
@@ -141,7 +141,15 @@ public class CachedList<CO extends CachedModel> extends CachedModel {
     }
 
     /**
-     * @see CachedModel#writeToParcel(android.os.Parcel, int)
+     * @see Parcelable#describeContents()
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -154,18 +162,20 @@ public class CachedList<CO extends CachedModel> extends CachedModel {
     /**
      * @see android.os.Parcelable.Creator#createFromParcel(android.os.Parcel)
      */
-    @Override
-    public void readFromParcel(Parcel source) {
+    private void readFromParcel(Parcel source) {
         // Read class from parcel, then load class and use creator to generate new object from data
         try {
             String className = source.readString();
-            clazz = (Class<? extends CachedModel>) Class.forName(className);
+            clazz = (Class<? extends Parcelable>) Class.forName(className);
             list = source.createTypedArrayList((Creator) clazz.getField("CREATOR").get(this));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * @see android.os.Parcelable.Creator
+     */
     public static final Creator<CachedList> CREATOR = new Creator<CachedList>() {
         @Override
         public CachedList createFromParcel(Parcel in) {
